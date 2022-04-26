@@ -56,9 +56,8 @@ def home(request: Request, db: Session = Depends(get_db)):
 #ADICIONAR NOVAS TAREFAS
 @app.post("/add")
 def add(request: Request, dia: str = Form(...), title: str = Form(...), db: Session = Depends(get_db)):
-    novo_dia = models.Tarefa(dia=dia)
-    nova_tarefa = models.Tarefa(title=title)
-    db.add(nova_tarefa, novo_dia)
+    nova_tarefa = models.Tarefa(title=title, dia=dia)
+    db.add(nova_tarefa)
     db.commit()
 
     url = app.url_path_for("home")

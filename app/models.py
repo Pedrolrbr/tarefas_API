@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from numpy import datetime_as_string
+from sqlite3 import Date
 from sqlalchemy import DATE, Boolean, Column, Integer, String
 
 
@@ -12,5 +12,5 @@ class Tarefa(Base):
     id          = Column(Integer, primary_key=True, index=True)
     title       = Column(String)
     complete    = Column(Boolean, default=False)
-    dia         = Column(Integer)
+    dia         = Column(String)
 
