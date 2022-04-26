@@ -33,8 +33,11 @@ app.add_middleware(
 )
 
 
-#Templates
-templates = Jinja2Templates(directory="C:/Users/pedro/tarefas_front/templates")
+#Templates 
+'''
+!!!! ESPECIFICAR O LOCAL DA PASTA tarefas_front !!!!
+'''
+templates = Jinja2Templates(directory="C:/.../tarefas_front/templates")
 
 
 
