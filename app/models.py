@@ -10,7 +10,10 @@ class Tarefa(Base):
     __tablename__ = "tarefas"
 
     id          = Column(Integer, primary_key=True, index=True)
+    tipo        = Column(String)
     title       = Column(String)
     complete    = Column(Boolean, default=False)
     dia         = Column(String)
+
+
 

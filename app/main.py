@@ -1,6 +1,7 @@
 from datetime import date
 from fastapi import FastAPI, Depends, Request, Form, status
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import true
 from starlette.responses import RedirectResponse
 from starlette.templating import Jinja2Templates
 from sqlalchemy.orm import Session
@@ -51,12 +52,25 @@ def get_db():
 def home(request: Request, db: Session = Depends(get_db)):
     tarefa = db.query(models.Tarefa).all()
     return templates.TemplateResponse("index.html",
-                                      {"request": request, "tarefa_list": tarefa})
+                                    {"request": request, "tarefa_list": tarefa})
+
+#RETORNA TODAS AS TAREFAS
+@app.get("/tarefas")
+def get_items(db: Session = Depends(get_db)):
+    items = db.query(models.Tarefa).all() 
+    return items
+
+
+@app.get("/tarefas_finalizadas")
+def get_items_finalizadas(request: Request, db: Session = Depends(get_db)):
+    finalizadas = db.query(models.Tarefa).all()
+    return templates.TemplateResponse("finished.html",
+                                {"request": request, "tarefa_list": finalizadas})
 
 #ADICIONAR NOVAS TAREFAS
 @app.post("/add")
-def add(request: Request, dia: str = Form(...), title: str = Form(...), db: Session = Depends(get_db)):
-    nova_tarefa = models.Tarefa(title=title, dia=dia)
+def add(request: Request, tipo: str = Form(...), dia: str = Form(...), title: str = Form(...), db: Session = Depends(get_db)):
+    nova_tarefa = models.Tarefa(title=title, dia=dia, tipo=tipo)
     db.add(nova_tarefa)
     db.commit()
 
