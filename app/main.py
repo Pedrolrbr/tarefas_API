@@ -1,7 +1,6 @@
 from datetime import date
 from fastapi import FastAPI, Depends, Request, Form, status
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import true
 from starlette.responses import RedirectResponse
 from starlette.templating import Jinja2Templates
 from sqlalchemy.orm import Session
@@ -38,7 +37,9 @@ app.add_middleware(
 '''
 !!!! ESPECIFICAR O LOCAL DA PASTA tarefas_front !!!!
 '''
-templates = Jinja2Templates(directory="C:/.../tarefas_front/templates")
+templates = Jinja2Templates(directory="C:/Users/pedro/tarefas_front/templates")
+
+filtros = Jinja2Templates(directory="C:/Users/pedro/tarefas_front/templates/filtros")
 
 
 
@@ -64,11 +65,50 @@ def get_items(db: Session = Depends(get_db)):
     return items
 
 
+#Tarefas Finalizadas
 @app.get("/tarefas_finalizadas")
 def get_items_finalizadas(request: Request, db: Session = Depends(get_db)):
-    finalizadas = db.query(models.Tarefa).all()
-    return templates.TemplateResponse("finished.html",
+    finalizadas = db.query(models.Tarefa).filter(models.Tarefa.complete == '1')
+    return filtros.TemplateResponse("finished.html",
                                 {"request": request, "tarefa_list": finalizadas})
+
+#TAREFAS ESPORTE
+@app.get("/tarefas_esporte")
+def get_items_finalizadas(request: Request, db: Session = Depends(get_db)):
+    esporte = db.query(models.Tarefa).filter(models.Tarefa.tipo == 'Esportes')
+    return filtros.TemplateResponse("esportes.html",
+                                {"request": request, "tarefa_list": esporte})                                
+
+#TAREFAS TRABALHO
+@app.get("/tarefas_trabalho")
+def get_items_finalizadas(request: Request, db: Session = Depends(get_db)):
+    trabalho = db.query(models.Tarefa).filter(models.Tarefa.tipo == 'Trabalho')
+    return filtros.TemplateResponse("trabalho.html",
+                                {"request": request, "tarefa_list": trabalho})
+
+#TAREFAS ESTUDOS
+@app.get("/tarefas_estudo")
+def get_items_finalizadas(request: Request, db: Session = Depends(get_db)):
+    estudo = db.query(models.Tarefa).filter(models.Tarefa.tipo == 'Estudos')
+    return filtros.TemplateResponse("estudos.html",
+                                {"request": request, "tarefa_list": estudo})          
+
+
+#TAREFAS LAZER
+@app.get("/tarefas_lazer")
+def get_items_finalizadas(request: Request, db: Session = Depends(get_db)):
+    lazer = db.query(models.Tarefa).filter(models.Tarefa.tipo == 'Lazer')
+    return filtros.TemplateResponse("lazer.html",
+                                {"request": request, "tarefa_list": lazer})   
+
+#TAREFAS VIAGEM
+@app.get("/tarefas_viagem")
+def get_items_finalizadas(request: Request, db: Session = Depends(get_db)):
+    viagem = db.query(models.Tarefa).filter(models.Tarefa.tipo == 'Viagem')
+    return filtros.TemplateResponse("viagem.html",
+                                {"request": request, "tarefa_list": viagem})   
+
+
 
 #ADICIONAR NOVAS TAREFAS
 @app.post("/add")
